@@ -1,209 +1,340 @@
-# Email Notifications System Setup Guide
+# Email Notifications Setup & Configuration Guide 📧
 
-## ✅ What's Been Created
+## Current Status
 
-A comprehensive email notification system has been added to your Liberty International Bank application. The system sends professional, clean email notifications to both users and admins for various banking actions.
+### ✅ What's Already Implemented
 
-### Features
+The email notification system is **fully implemented** in the code! Email notifications are already being sent for:
 
-- **Transfer Notifications**: Internal, External, P2P, and Wire transfers
-- **Bill Payment Notifications**: Confirmation emails for bill payments
-- **Loan Notifications**: Application received, approval, and payment confirmations
-- **Admin Notifications**: Admins receive copies of all important transactions
-- **Email Tracking**: All sent emails are logged in the database
-- **Professional Templates**: Clean, responsive HTML email templates
+1. **✅ User Transfers** - When users transfer money
+2. **✅ Admin Funding** - When admin funds user accounts
+3. **✅ Card Transactions** - When admin processes card transactions (debit, credit, ATM, etc.)
+4. **✅ Loan Applications** - When users apply for loans
+5. **✅ Loan Approvals** - When admin approves loans
+6. **✅ Loan Payments** - When loan payments are made
+7. **✅ Role Changes** - When admin changes user roles
+8. **✅ Mobile Deposits** - When users submit mobile deposits
+9. **✅ Contact Form** - When someone submits contact form
+10. **✅ Support Tickets** - When support tickets are created
 
-## 📋 Setup Steps
+### ⚠️ Why Emails Aren't Sending
 
-### Step 1: Install Dependencies
+Emails are **already coded** but not working because:
 
-```bash
-npm install resend
-```
+**1. Database Functions Missing**
+- Required RPC functions don't exist in database
+- Functions needed: `get_admin_emails()` and `get_user_email_info()`
+- Without these, the code can't get user/admin email addresses
 
-### Step 2: Set Up Resend Account
+**2. Environment Variables Not Configured**
+- `EMAIL_USER` - Your Gmail address
+- `EMAIL_PASSWORD` - Your Gmail app password
+- Without these, Nodemailer can't send emails
 
-1. Go to https://resend.com and create a free account
-2. Verify your domain or use Resend's test domain for development
-3. Get your API key from the dashboard
+**3. Table May Not Exist**
+- `email_notifications` table may not exist
+- Used for logging email activity
 
-### Step 3: Configure Environment Variables
+## How to Fix (3 Steps)
 
-Create or update your `.env.local` file with the following:
+### STEP 1: Run Database Script
 
-```env
-# Resend Email Service
-RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-# Email Configuration
-FROM_EMAIL=Liberty Bank <noreply@yourdomain.com>
-REPLY_TO_EMAIL=support@yourdomain.com
-```
-
-**Important Notes:**
-- Replace `re_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx` with your actual Resend API key
-- Replace `noreply@yourdomain.com` with your verified domain email
-- Replace `support@yourdomain.com` with your support email
-- For development, you can use Resend's test domain: `onboarding@resend.dev`
-
-### Step 4: Create Database Tables
-
-Run the SQL file in your Supabase SQL Editor:
-
-```bash
-database_email_notifications_system.sql
-```
+**In Supabase Dashboard:**
+1. Go to SQL Editor
+2. Click "New Query"
+3. Copy and paste the contents of `database_add_email_functions.sql`
+4. Click "Run"
 
 This creates:
-- `email_notifications` table for tracking sent emails
-- Helper functions to get admin and user emails
-- Row Level Security (RLS) policies
+- `get_admin_emails()` function
+- `get_user_email_info()` function
+- `email_notifications` table
+- Proper security policies
 
-### Step 5: Verify Installation
+### STEP 2: Configure Email Environment Variables
 
-1. Make a test transfer or bill payment
-2. Check your email inbox
-3. Check the `email_notifications` table in Supabase to see logged emails
+**In Vercel Dashboard:**
+1. Go to your project → Settings → Environment Variables
+2. Add these variables:
 
-## 📧 Email Notification Types
+```bash
+# For Gmail (recommended)
+EMAIL_SERVICE=gmail
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASSWORD=your-app-password-here
+EMAIL_FROM=Liberty Bank <noreply@libertybank.com>
 
-The system sends emails for:
+# Alternative: Custom SMTP
+EMAIL_HOST=smtp.your-provider.com
+EMAIL_PORT=587
+EMAIL_SECURE=false
+EMAIL_USER=your-email@domain.com
+EMAIL_PASSWORD=your-password
+EMAIL_FROM=Liberty Bank <noreply@domain.com>
+```
 
-### Transfers
-- **Internal Transfer**: Between user's own accounts
-- **External Transfer**: To external bank accounts
-- **P2P Transfer**: Peer-to-peer transfers
-- **Wire Transfer**: Domestic and international wire transfers
+3. Click "Save"
+4. Redeploy your application
 
-### Bills
-- **Bill Payment**: Confirmation when a bill is paid
+**For Gmail App Password:**
+1. Go to myaccount.google.com
+2. Security → 2-Step Verification (enable if not enabled)
+3. App Passwords → Generate new app password
+4. Select "Mail" and "Other" (name it "Liberty Bank")
+5. Copy the 16-character password (no spaces!)
+6. Use this as `EMAIL_PASSWORD`
 
-### Loans
-- **Loan Application**: When a user submits a loan application
-- **Loan Approval**: When admin approves a loan
-- **Loan Payment**: When a user makes a loan payment
+### STEP 3: Test Email Notifications
 
-## 🎨 Email Templates
+After completing steps 1 & 2:
 
-All emails use professional, responsive HTML templates with:
-- Clean, modern design
-- Mobile-responsive layout
-- Brand colors and styling
-- Transaction details clearly displayed
-- Security notices where appropriate
+1. **Test Admin Funding:**
+   - Go to Admin → Users
+   - Select a user
+   - Click "Fund Account"
+   - Enter amount and submit
+   - ✅ User should receive email
 
-## 🔧 Customization
+2. **Test Card Transaction:**
+   - Go to Admin → Cards
+   - Select a card
+   - Perform an action (debit/credit)
+   - ✅ User should receive email
 
-### Customizing Email Templates
+3. **Test User Transfer:**
+   - Login as regular user
+   - Go to Transfer
+   - Make a transfer
+   - ✅ You should receive email
 
-Edit the templates in `lib/utils/emailTemplates.ts`:
-- `getTransferEmailTemplate()` - Transfer notifications
-- `getBillPaymentEmailTemplate()` - Bill payment notifications
-- `getLoanApplicationEmailTemplate()` - Loan application notifications
-- `getLoanApprovalEmailTemplate()` - Loan approval notifications
-- `getLoanPaymentEmailTemplate()` - Loan payment notifications
+## Code Locations
 
-### Customizing Email Service
+### Email Notification Functions
+**File**: `lib/utils/emailNotifications.ts`
 
-Edit `lib/utils/emailService.ts` to:
-- Change email sending logic
-- Add new notification types
-- Customize email logging
+Functions available:
+- `sendTransferNotification()` - For transfers
+- `sendBillPaymentNotification()` - For bill payments
+- `sendLoanApplicationNotification()` - For loan applications
+- `sendLoanApprovalNotification()` - For loan approvals
+- `sendLoanPaymentNotification()` - For loan payments
+- `sendRoleChangeNotification()` - For role changes
+- `sendAccountFundedNotification()` - For account funding
+- `sendMobileDepositNotification()` - For mobile deposits
+- `sendCardTransactionNotification()` - For card transactions
 
-### Customizing API Route
+### Where Emails Are Sent
 
-Edit `app/api/email/send/route.ts` to:
-- Change email service provider
-- Add custom email processing
-- Modify email headers
+**Admin Actions:**
+- `app/admin/users/page.tsx` (line 708) - Calls `sendAccountFundedNotification()`
+- `app/admin/cards/page.tsx` (line 329) - Calls `sendCardTransactionNotification()`
 
-## 📊 Email Tracking
+**User Actions:**
+- `app/transfer/page.tsx` (line 507, 596) - Calls `sendTransferNotification()`
 
-All sent emails are tracked in the `email_notifications` table with:
-- Recipient email and name
-- Notification type
-- Subject line
-- Send status (success/failure)
-- Error messages (if any)
-- Metadata (transaction details, amounts, etc.)
-- Timestamps
+**API Routes:**
+- `app/api/email/send/route.ts` - Main email sending endpoint
 
-## 🔒 Security
+### Email Service
+**File**: `lib/utils/emailService.ts`
 
-- Email sending is non-blocking (won't break transactions if email fails)
-- All email operations are logged for audit purposes
-- RLS policies ensure users can only see their own email notifications
-- Admins can view all email notifications
+Core functions:
+- `sendEmailNotification()` - Sends email via API
+- `notifyUser()` - Sends email to user
+- `notifyAdmins()` - Sends email to all admins
+- `notifyUserAndAdmins()` - Sends to both
 
-## 🐛 Troubleshooting
+### Email Templates
+**File**: `lib/utils/emailTemplates.ts`
 
-### Emails Not Sending
+HTML email templates for:
+- Transfers (internal, external, P2P, wire)
+- Bill payments
+- Loan applications, approvals, payments
+- Card transactions
+- Account funding
+- Role changes
+- Mobile deposits
+- Contact forms
+- Support tickets
+- OTP codes
 
-1. **Check API Key**: Verify `RESEND_API_KEY` is set correctly
-2. **Check Domain**: Ensure your domain is verified in Resend
-3. **Check Logs**: Look at the `email_notifications` table for error messages
-4. **Check Console**: Look for errors in browser console and server logs
+## Email Flow Architecture
 
-### Development Mode
+```
+User Action → emailNotifications.ts
+     ↓
+notifyUser(userId) → emailService.ts
+     ↓
+getUserEmailInfo(userId) → Database RPC
+     ↓
+sendEmailNotification() → /api/email/send
+     ↓
+Nodemailer → SMTP Server → User's Email
+     ↓
+Email Delivered ✅
+```
 
-In development, if `RESEND_API_KEY` is not set, emails will be logged to the console instead of being sent. This is intentional to prevent accidental email sends during development.
+## Troubleshooting
 
-### Email Delivery Issues
+### Problem: Emails Still Not Sending
 
-- Check Resend dashboard for delivery status
-- Verify recipient email addresses are valid
-- Check spam/junk folders
-- Review Resend logs for bounce/spam reports
+**Check 1: Database Functions**
+Run this SQL to verify functions exist:
+```sql
+SELECT routine_name 
+FROM information_schema.routines 
+WHERE routine_name IN ('get_admin_emails', 'get_user_email_info');
+```
 
-## 📝 Adding New Notification Types
+**Check 2: Environment Variables**
+In your deployed app, check logs for:
+```
+📧 Email (Development Mode - Email not configured)
+```
 
-To add a new notification type:
+If you see this, environment variables aren't set.
 
-1. Add the notification type to `database_email_notifications_system.sql`:
-   ```sql
-   CHECK (notification_type IN (..., 'new_type'))
-   ```
+**Check 3: Email Service**
+Check console logs for:
+```
+✅ Email sent successfully
+```
 
-2. Create a template function in `lib/utils/emailTemplates.ts`:
-   ```typescript
-   export function getNewTypeEmailTemplate(data: NewTypeData) {
-     // Template code
-   }
-   ```
+If you see errors like "Invalid credentials" or "Connection failed", check your email password.
 
-3. Add handling in `app/api/email/send/route.ts`:
-   ```typescript
-   case 'new_type': {
-     // Handle new type
-   }
-   ```
+### Problem: OTP Emails Work But Transaction Emails Don't
 
-4. Create a helper function in `lib/utils/emailNotifications.ts`:
-   ```typescript
-   export async function sendNewTypeNotification(...) {
-     // Notification logic
-   }
-   ```
+**Why**: OTP uses Resend API, but transactions use Nodemailer
 
-5. Call the function where needed in your code
+**Solution**: 
+- OTP: Uses `RESEND_API_KEY` environment variable
+- Transactions: Use `EMAIL_USER` and `EMAIL_PASSWORD`
+- Both need to be configured separately
 
-## 🎯 Best Practices
+**To make transactions use Resend too** (optional):
+You can modify `/api/email/send/route.ts` to use Resend instead of Nodemailer if preferred.
 
-1. **Always use non-blocking email sends**: Don't let email failures break transactions
-2. **Log all email attempts**: Track both successes and failures
-3. **Use meaningful subjects**: Help users identify emails quickly
-4. **Include reference numbers**: Make it easy to track transactions
-5. **Test thoroughly**: Test all email types before going to production
-6. **Monitor email delivery**: Check Resend dashboard regularly
-7. **Keep templates updated**: Ensure branding and information stay current
+## Testing Email Notifications
 
-## 📚 Additional Resources
+### Test 1: Admin Funding
+```typescript
+// In Admin → Users page
+handleFundSubmit() 
+  → Creates transaction
+  → Calls sendAccountFundedNotification()
+  → User receives email ✉️
+```
 
-- [Resend Documentation](https://resend.com/docs)
-- [Next.js API Routes](https://nextjs.org/docs/api-routes/introduction)
-- [Supabase RLS Policies](https://supabase.com/docs/guides/auth/row-level-security)
+### Test 2: Card Transaction
+```typescript
+// In Admin → Cards page
+handleCardAction()
+  → Creates card transaction
+  → Calls sendCardTransactionNotification()
+  → User receives email ✉️
+```
+
+### Test 3: User Transfer
+```typescript
+// In Transfer page
+handleTransferSubmit()
+  → Creates transfer
+  → Calls sendTransferNotification()
+  → User receives email ✉️
+  → Admin receives notification ✉️
+```
+
+## Email Templates
+
+All emails include:
+- Professional HTML design
+- Liberty Bank branding
+- Transaction details
+- Reference numbers
+- Date/time stamps
+- Contact information
+- Security disclaimers
+
+Example email content:
+```html
+Subject: Account Funded - $1,000.00 - REF123456
+
+Dear John Doe,
+
+Your Checking account has been funded with $1,000.00.
+
+Transaction Details:
+- Amount: $1,000.00
+- Account: Checking
+- Method: Direct Deposit
+- Reference: REF123456
+- Date: Nov 30, 2025
+
+Thank you for banking with Liberty Bank.
+```
+
+## Current Configuration
+
+### What Uses Nodemailer (Requires EMAIL_USER/PASSWORD):
+- All transaction emails
+- Admin action notifications
+- Bill payment notifications
+- Role change notifications
+- Contact form emails
+- Support ticket emails
+
+### What Uses Resend (Requires RESEND_API_KEY):
+- OTP emails only
+
+### Recommendation:
+Configure both for complete coverage:
+1. Set up Nodemailer (Gmail or SMTP)
+2. Keep Resend for OTP (already working)
+
+## Security Considerations
+
+### Email Security:
+- ✅ Emails sent via secure connection (TLS/SSL)
+- ✅ Sensitive data masked in logs
+- ✅ No passwords in email content
+- ✅ Reference numbers for tracking
+- ✅ Professional from address
+
+### Database Security:
+- ✅ RPC functions use SECURITY DEFINER
+- ✅ Row Level Security on email_notifications table
+- ✅ Only admins can view email logs
+- ✅ Automatic user/admin email fetching
+
+## Summary
+
+### What's Working:
+- ✅ OTP emails (using Resend)
+- ✅ All email notification code is written
+- ✅ All transaction types covered
+- ✅ Templates are professional
+- ✅ Error handling implemented
+
+### What Needs Setup:
+- ⚠️ Run database_add_email_functions.sql
+- ⚠️ Set EMAIL_USER and EMAIL_PASSWORD in Vercel
+- ⚠️ Test after configuration
+
+### Once Configured:
+- 🎯 All transactions will send emails
+- 🎯 Admin actions will notify users
+- 🎯 Users will receive all notifications
+- 🎯 Admins will be kept informed
+- 🎯 Full audit trail of communications
 
 ---
 
-**Ready to go!** Your email notification system is now set up and ready to send professional banking notifications to your users and admins.
+**Action Required**: 
+1. Run `database_add_email_functions.sql` in Supabase
+2. Add email environment variables in Vercel
+3. Redeploy application
+4. Test email notifications
 
+**Estimated Setup Time**: 10-15 minutes  
+**Result**: All transaction emails working! 📧✅
