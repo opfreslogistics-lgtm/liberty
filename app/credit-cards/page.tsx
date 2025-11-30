@@ -57,10 +57,10 @@ export default function CreditCardsPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <AdvancedNavbar />
       
-      <section className="relative py-20 lg:py-28 bg-gradient-to-br from-purple-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <section className="relative py-20 lg:py-28 bg-gradient-to-br from-purple-50/50 via-white to-blue-50/50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
             <CreditCard className="w-16 h-16 mx-auto mb-6 text-green-600 dark:text-green-400" />
@@ -86,15 +86,15 @@ export default function CreditCardsPage() {
             {cards.map((card, idx) => {
               const Icon = card.icon
               return (
-                <div key={idx} className={`relative bg-gradient-to-br ${card.gradient} rounded-3xl p-8 text-white shadow-2xl hover:scale-105 transition-all`}>
-                  <Icon className="w-12 h-12 mb-4 opacity-80" />
+                <div key={idx} className={`relative bg-gradient-to-br ${card.gradient} rounded-3xl p-8 text-white shadow-xl hover:shadow-2xl hover:scale-105 transition-all`}>
+                  <Icon className="w-12 h-12 mb-4 opacity-90" />
                   <h3 className="text-2xl font-bold mb-2">{card.name}</h3>
                   <p className="text-sm opacity-90 mb-4">Best for: {card.bestFor}</p>
                   <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 mb-4">
                     <div className="flex justify-between mb-2"><span>APR:</span><span>{card.rate}</span></div>
                     <div className="flex justify-between"><span>Annual Fee:</span><span>{card.annual}</span></div>
                   </div>
-                  <p className="font-semibold mb-4">{card.rewards}</p>
+                  <p className="font-semibold mb-4 text-sm">{card.rewards}</p>
                   <ul className="space-y-2">
                     {card.features.map((f, i) => (<li key={i} className="flex items-center gap-2 text-sm"><span className="w-1.5 h-1.5 bg-white rounded-full"></span>{f}</li>))}
                   </ul>
@@ -105,14 +105,14 @@ export default function CreditCardsPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-green-50 dark:from-gray-800 dark:to-gray-900">
+      <section className="py-20 bg-gray-50 dark:from-gray-800 dark:to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white">Card Benefits</h2>
           <div className="grid md:grid-cols-4 gap-6">
             {benefits.map((b, i) => {
               const Icon = b.icon
               return (
-                <div key={i} className="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-lg">
+                <div key={i} className="bg-white dark:bg-gray-800 rounded-2xl p-6 text-center shadow-sm hover:shadow-md transition-all border border-gray-100 dark:border-gray-700">
                   <Icon className="w-12 h-12 mx-auto mb-4 text-green-600" />
                   <h3 className="font-bold mb-2 text-gray-900 dark:text-white">{b.title}</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">{b.desc}</p>

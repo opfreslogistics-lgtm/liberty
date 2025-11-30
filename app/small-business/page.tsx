@@ -14,10 +14,10 @@ export default function SmallBusinessPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <AdvancedNavbar />
       
-      <section className="py-20 lg:py-28 bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <section className="py-20 lg:py-28 bg-gradient-to-br from-blue-50/50 via-white to-green-50/50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Store className="w-16 h-16 mx-auto mb-6 text-green-600 dark:text-green-400" />
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 dark:text-white">
@@ -31,7 +31,7 @@ export default function SmallBusinessPage() {
             <Link href="/signup" className="px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-xl font-semibold hover:shadow-2xl transform hover:scale-105 transition-all">
               Open Business Account
             </Link>
-            <Link href="/contact" className="px-8 py-4 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl font-semibold hover:border-green-600 transition-all">
+            <Link href="/contact" className="px-8 py-4 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl font-semibold hover:border-green-600 transition-all shadow-sm">
               Schedule Meeting
             </Link>
           </div>
@@ -44,7 +44,7 @@ export default function SmallBusinessPage() {
             {solutions.map((solution, i) => {
               const Icon = solution.icon
               return (
-                <div key={i} className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-700 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all border border-gray-200 dark:border-gray-600 group">
+                <div key={i} className="bg-white dark:from-gray-800 dark:to-gray-700 rounded-3xl p-8 shadow-md hover:shadow-xl transition-all border border-gray-100 dark:border-gray-600 group hover:border-green-200 dark:hover:border-green-700">
                   <div className={`w-14 h-14 bg-gradient-to-br ${solution.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
                     <Icon className="w-7 h-7 text-white" />
                   </div>

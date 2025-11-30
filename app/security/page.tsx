@@ -27,10 +27,10 @@ export default function SecurityPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <AdvancedNavbar />
       
-      <section className="py-20 lg:py-28 bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <section className="py-20 lg:py-28 bg-gradient-to-br from-blue-50/50 via-white to-green-50/50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <Shield className="w-16 h-16 mx-auto mb-6 text-green-600 dark:text-green-400" />
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 dark:text-white">
@@ -54,7 +54,7 @@ export default function SecurityPage() {
             {features.map((feature, i) => {
               const Icon = feature.icon
               return (
-                <div key={i} className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-700 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border border-gray-200 dark:border-gray-600">
+                <div key={i} className="bg-white dark:from-gray-800 dark:to-gray-700 rounded-2xl p-6 shadow-md hover:shadow-lg transition-all border border-gray-100 dark:border-gray-600 hover:border-green-200 dark:hover:border-green-700">
                   <Icon className="w-12 h-12 text-green-600 dark:text-green-400 mb-4" />
                   <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">{feature.title}</h3>
                   <p className="text-gray-600 dark:text-gray-300">{feature.desc}</p>
@@ -65,7 +65,7 @@ export default function SecurityPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-green-50 dark:from-gray-800 dark:to-gray-900">
+      <section className="py-20 bg-gray-50 dark:from-gray-800 dark:to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             <div>
@@ -92,11 +92,11 @@ export default function SecurityPage() {
               </p>
               <div className="space-y-4 mb-6">
                 <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                  <div className="font-semibold mb-1">24/7 Fraud Hotline</div>
+                  <div className="font-semibold mb-1 text-sm">24/7 Fraud Hotline</div>
                   <div className="text-2xl font-bold">1-800-FRAUD-99</div>
                 </div>
                 <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                  <div className="font-semibold mb-1">Report Online</div>
+                  <div className="font-semibold mb-1 text-sm">Report Online</div>
                   <div className="text-lg">support@libertybank.com</div>
                 </div>
               </div>
@@ -116,7 +116,7 @@ export default function SecurityPage() {
           <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">
             Your deposits are insured up to $250,000 by the Federal Deposit Insurance Corporation
           </p>
-          <div className="bg-gradient-to-br from-gray-50 to-green-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-8 border border-gray-200 dark:border-gray-600">
+          <div className="bg-gray-50 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-8 border border-gray-100 dark:border-gray-600">
             <div className="flex items-center justify-center gap-4 mb-4">
               <Shield className="w-8 h-8 text-green-600 dark:text-green-400" />
               <span className="text-2xl font-bold text-gray-900 dark:text-white">FDIC Member</span>

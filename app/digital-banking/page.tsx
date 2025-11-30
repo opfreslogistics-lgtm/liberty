@@ -20,10 +20,10 @@ export default function DigitalBankingPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <AdvancedNavbar />
       
-      <section className="py-20 lg:py-28 bg-gradient-to-br from-cyan-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <section className="py-20 lg:py-28 bg-gradient-to-br from-cyan-50/50 via-white to-blue-50/50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -40,7 +40,7 @@ export default function DigitalBankingPage() {
                   <Download className="w-5 h-5" />
                   Download App
                 </Link>
-                <Link href="/login" className="px-8 py-4 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl font-semibold hover:border-green-600 transition-all">
+                <Link href="/login" className="px-8 py-4 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl font-semibold hover:border-green-600 transition-all shadow-sm">
                   Sign In
                 </Link>
               </div>
@@ -49,19 +49,19 @@ export default function DigitalBankingPage() {
               <div className="bg-gradient-to-br from-green-600 to-emerald-700 rounded-3xl p-8 shadow-2xl">
                 <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 mb-4">
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-gray-600 dark:text-gray-400">Total Balance</span>
+                    <span className="text-gray-600 dark:text-gray-400 text-sm font-medium">Total Balance</span>
                     <Shield className="w-5 h-5 text-green-600" />
                   </div>
                   <div className="text-4xl font-bold text-gray-900 dark:text-white mb-2">$12,458.50</div>
                   <div className="flex gap-2">
-                    <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full text-sm">+5.2%</span>
+                    <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-full text-sm font-medium">+5.2%</span>
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-3">
                   {[{ icon: Send, label: 'Send' }, { icon: QrCode, label: 'Pay' }, { icon: CreditCard, label: 'Cards' }].map((item, i) => (
                     <div key={i} className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center text-white">
                       <item.icon className="w-6 h-6 mx-auto mb-2" />
-                      <span className="text-sm">{item.label}</span>
+                      <span className="text-sm font-medium">{item.label}</span>
                     </div>
                   ))}
                 </div>
@@ -78,7 +78,7 @@ export default function DigitalBankingPage() {
             {features.map((feature, i) => {
               const Icon = feature.icon
               return (
-                <div key={i} className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-700 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all border border-gray-200 dark:border-gray-600 group">
+                <div key={i} className="bg-white dark:from-gray-800 dark:to-gray-700 rounded-3xl p-8 shadow-md hover:shadow-xl transition-all border border-gray-100 dark:border-gray-600 group hover:border-green-200 dark:hover:border-green-700">
                   <div className={`w-14 h-14 bg-gradient-to-br ${feature.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
                     <Icon className="w-7 h-7 text-white" />
                   </div>
@@ -99,7 +99,7 @@ export default function DigitalBankingPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-green-50 dark:from-gray-800 dark:to-gray-900">
+      <section className="py-20 bg-gray-50 dark:from-gray-800 dark:to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <Zap className="w-12 h-12 mx-auto mb-4 text-green-600 dark:text-green-400" />
@@ -108,9 +108,9 @@ export default function DigitalBankingPage() {
           </div>
           <div className="grid md:grid-cols-3 gap-4 max-w-4xl mx-auto">
             {appFeatures.map((feature, i) => (
-              <div key={i} className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow text-center border border-gray-200 dark:border-gray-700">
+              <div key={i} className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm text-center border border-gray-100 dark:border-gray-700 hover:border-green-200 dark:hover:border-green-700 transition-all">
                 <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400 mx-auto mb-2" />
-                <span className="text-gray-900 dark:text-white font-medium">{feature}</span>
+                <span className="text-gray-900 dark:text-white font-medium text-sm">{feature}</span>
               </div>
             ))}
           </div>

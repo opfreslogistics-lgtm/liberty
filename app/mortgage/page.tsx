@@ -23,10 +23,10 @@ export default function MortgagePage() {
   ]
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <AdvancedNavbar />
       
-      <section className="py-20 lg:py-28 bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <section className="py-20 lg:py-28 bg-gradient-to-br from-blue-50/50 via-white to-green-50/50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
             <Home className="w-16 h-16 mx-auto mb-6 text-green-600 dark:text-green-400" />
@@ -43,7 +43,7 @@ export default function MortgagePage() {
               <Link href="/signup" className="px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-xl font-semibold hover:shadow-2xl transform hover:scale-105 transition-all">
                 Get Pre-Approved
               </Link>
-              <Link href="/contact" className="px-8 py-4 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl font-semibold hover:border-green-600 transition-all">
+              <Link href="/contact" className="px-8 py-4 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl font-semibold hover:border-green-600 transition-all shadow-sm">
                 <Calculator className="inline w-5 h-5 mr-2" />
                 Calculate Payment
               </Link>
@@ -61,7 +61,7 @@ export default function MortgagePage() {
             {loanTypes.map((loan, i) => {
               const Icon = loan.icon
               return (
-                <div key={i} className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-700 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all border border-gray-200 dark:border-gray-600 group">
+                <div key={i} className="bg-white dark:from-gray-800 dark:to-gray-700 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all border border-gray-100 dark:border-gray-600 group hover:border-green-200 dark:hover:border-green-700">
                   <div className={`w-12 h-12 bg-gradient-to-br ${loan.color} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                     <Icon className="w-6 h-6 text-white" />
                   </div>
@@ -76,7 +76,7 @@ export default function MortgagePage() {
         </div>
       </section>
 
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-green-50 dark:from-gray-800 dark:to-gray-900">
+      <section className="py-20 bg-gray-50 dark:from-gray-800 dark:to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -95,12 +95,12 @@ export default function MortgagePage() {
               <Clock className="w-12 h-12 mb-4" />
               <h3 className="text-2xl font-bold mb-4">Get Approved in 24 Hours</h3>
               <p className="text-green-100 mb-6">Fast-track your home purchase with our streamlined approval process. Apply online and get a decision quickly.</p>
-              <div className="space-y-3">
-                <div className="flex items-center gap-3"><div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">1</div><span>Complete application (15 min)</span></div>
-                <div className="flex items-center gap-3"><div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">2</div><span>Submit documents</span></div>
-                <div className="flex items-center gap-3"><div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">3</div><span>Get pre-approval letter</span></div>
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center gap-3"><div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-sm font-bold">1</div><span>Complete application (15 min)</span></div>
+                <div className="flex items-center gap-3"><div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-sm font-bold">2</div><span>Submit documents</span></div>
+                <div className="flex items-center gap-3"><div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-sm font-bold">3</div><span>Get pre-approval letter</span></div>
               </div>
-              <Link href="/signup" className="inline-block mt-6 px-6 py-3 bg-white text-green-700 rounded-xl font-semibold hover:bg-gray-100 transition-all shadow-lg">
+              <Link href="/signup" className="inline-block w-full text-center px-6 py-3 bg-white text-green-700 rounded-xl font-semibold hover:bg-gray-100 transition-all shadow-lg">
                 Start Application
               </Link>
             </div>

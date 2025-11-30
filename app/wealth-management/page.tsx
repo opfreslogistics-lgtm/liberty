@@ -20,10 +20,10 @@ export default function WealthManagementPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <AdvancedNavbar />
       
-      <section className="py-20 lg:py-28 bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <section className="py-20 lg:py-28 bg-gradient-to-br from-indigo-50/50 via-white to-purple-50/50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <TrendingUp className="w-16 h-16 mx-auto mb-6 text-green-600 dark:text-green-400" />
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 dark:text-white">
@@ -46,7 +46,7 @@ export default function WealthManagementPage() {
             {services.map((service, i) => {
               const Icon = service.icon
               return (
-                <div key={i} className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-700 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border border-gray-200 dark:border-gray-600 group">
+                <div key={i} className="bg-white dark:from-gray-800 dark:to-gray-700 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all border border-gray-100 dark:border-gray-600 group hover:border-green-200 dark:hover:border-green-700">
                   <div className={`w-14 h-14 bg-gradient-to-br ${service.color} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                     <Icon className="w-7 h-7 text-white" />
                   </div>
@@ -59,14 +59,14 @@ export default function WealthManagementPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-green-50 dark:from-gray-800 dark:to-gray-900">
+      <section className="py-20 bg-gray-50 dark:from-gray-800 dark:to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white">Wealth Management Tiers</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {tiers.map((tier, i) => {
               const Icon = tier.icon
               return (
-                <div key={i} className="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-2xl hover:scale-105 transition-all border border-gray-200 dark:border-gray-700">
+                <div key={i} className="bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-md hover:shadow-xl hover:scale-105 transition-all border border-gray-100 dark:border-gray-700">
                   <Icon className="w-12 h-12 text-green-600 dark:text-green-400 mb-4" />
                   <h3 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">{tier.name}</h3>
                   <p className="text-green-600 dark:text-green-400 font-bold text-lg mb-1">Assets: {tier.min}</p>
