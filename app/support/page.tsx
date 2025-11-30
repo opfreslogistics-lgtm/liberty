@@ -379,11 +379,63 @@ export default function SupportPage() {
         // Continue even if response creation fails
       }
 
+      // Send email notifications
+      try {
+        // Get admin email from settings
+        const adminEmailResponse = await fetch('/api/email/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            notificationType: 'support_ticket',
+            recipientEmail: 'admin@libertybank.com', // This will be fetched from settings in the API route
+            recipientName: 'Admin',
+            subject: `New Support Ticket: ${ticketSubject}`,
+            metadata: {
+              ticketNumber: ticket.ticket_number || ticketId,
+              userName: `${profile.first_name} ${profile.last_name}`,
+              userEmail: profile.email,
+              category: ticketCategory,
+              priority: ticketPriority,
+              subject: ticketSubject,
+              message: ticketMessage,
+              date: new Date().toLocaleString(),
+            },
+          }),
+        })
+
+        // Send confirmation email to user
+        const userEmailResponse = await fetch('/api/email/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            notificationType: 'support_ticket_confirmation',
+            recipientEmail: profile.email,
+            recipientName: `${profile.first_name} ${profile.last_name}`,
+            subject: `Support Ticket Created - ${ticket.ticket_number || ticketId}`,
+            metadata: {
+              userName: `${profile.first_name} ${profile.last_name}`,
+              ticketNumber: ticket.ticket_number || ticketId,
+              category: ticketCategory,
+              subject: ticketSubject,
+              message: ticketMessage,
+              date: new Date().toLocaleString(),
+            },
+          }),
+        })
+
+        if (!adminEmailResponse.ok || !userEmailResponse.ok) {
+          console.error('Failed to send email notifications')
+        }
+      } catch (emailError) {
+        console.error('Error sending email notifications:', emailError)
+        // Continue even if email fails
+      }
+
       setNotification({
         isOpen: true,
         type: 'success',
         title: 'Ticket Created',
-        message: `Support ticket created successfully! Ticket ID: ${ticket.ticket_id || ticketId}. Our team will respond within 24 hours.`,
+        message: `Support ticket created successfully! Ticket ID: ${ticket.ticket_number || ticketId}. Our team will respond within 24 hours.`,
       })
 
     setShowTicketForm(false)

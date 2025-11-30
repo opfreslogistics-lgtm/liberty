@@ -15,6 +15,10 @@ import {
   getRoleChangeEmailTemplate,
   getAccountFundedEmailTemplate,
   getOTPEmailTemplate,
+  getContactFormEmailTemplate,
+  getContactConfirmationEmailTemplate,
+  getSupportTicketEmailTemplate,
+  getSupportTicketConfirmationEmailTemplate,
 } from '@/lib/utils/emailTemplates'
 import { getAppSetting } from '@/lib/utils/appSettings'
 
@@ -249,6 +253,78 @@ export async function POST(request: NextRequest) {
         break
       }
 
+      case 'contact_form': {
+        const contactData = {
+          senderName: metadata?.senderName || 'Unknown',
+          senderEmail: metadata?.senderEmail || 'No email provided',
+          senderPhone: metadata?.senderPhone || 'Not provided',
+          subject: metadata?.subject || 'No subject',
+          message: metadata?.message || 'No message',
+          date: metadata?.date || new Date().toLocaleString(),
+        }
+        const template = getContactFormEmailTemplate(contactData)
+        emailHtml = template.html
+        emailSubject = template.subject
+        break
+      }
+
+      case 'contact_confirmation': {
+        const confirmationData = {
+          name: metadata?.name || recipientName || 'Valued Customer',
+          subject: metadata?.subject || 'Your Inquiry',
+          message: metadata?.message || '',
+          date: metadata?.date || new Date().toLocaleString(),
+        }
+        const template = getContactConfirmationEmailTemplate(confirmationData)
+        emailHtml = template.html
+        emailSubject = template.subject
+        break
+      }
+
+      case 'support_ticket': {
+        // Get admin email from settings if not provided
+        const adminEmail = recipientEmail === 'admin@libertybank.com' 
+          ? (await getAppSetting('support_email') || await getAppSetting('contact_email') || recipientEmail)
+          : recipientEmail
+          
+        // Update recipientEmail to use admin email
+        if (recipientEmail === 'admin@libertybank.com') {
+          const updatedRecipient = adminEmail
+          // Re-assign for email sending later
+          mailOptions.to = updatedRecipient
+        }
+        
+        const ticketData = {
+          ticketNumber: metadata?.ticketNumber || 'N/A',
+          userName: metadata?.userName || 'Unknown',
+          userEmail: metadata?.userEmail || 'No email',
+          category: metadata?.category || 'General',
+          priority: metadata?.priority || 'medium',
+          subject: metadata?.subject || 'No subject',
+          message: metadata?.message || 'No message',
+          date: metadata?.date || new Date().toLocaleString(),
+        }
+        const template = getSupportTicketEmailTemplate(ticketData)
+        emailHtml = template.html
+        emailSubject = template.subject
+        break
+      }
+
+      case 'support_ticket_confirmation': {
+        const ticketConfirmationData = {
+          userName: metadata?.userName || recipientName || 'Valued Customer',
+          ticketNumber: metadata?.ticketNumber || 'N/A',
+          category: metadata?.category || 'General',
+          subject: metadata?.subject || 'Your Issue',
+          message: metadata?.message || '',
+          date: metadata?.date || new Date().toLocaleString(),
+        }
+        const template = getSupportTicketConfirmationEmailTemplate(ticketConfirmationData)
+        emailHtml = template.html
+        emailSubject = template.subject
+        break
+      }
+
       case 'card_transaction':
       case 'deposit_submitted': {
         // Generic transaction notification template
@@ -317,10 +393,18 @@ export async function POST(request: NextRequest) {
     const fromEmail = process.env.EMAIL_FROM || process.env.EMAIL_USER || FROM_EMAIL
     const replyTo = process.env.EMAIL_REPLY_TO || contactEmail || 'support@libertybank.com'
 
+    // Get final recipient email (may have been updated in switch statement for admin emails)
+    let finalRecipientEmail = recipientEmail
+    
+    // For support tickets sent to admin, get the actual admin email
+    if (notificationType === 'support_ticket' && recipientEmail === 'admin@libertybank.com') {
+      finalRecipientEmail = await getAppSetting('support_email') || await getAppSetting('contact_email') || recipientEmail
+    }
+    
     // Send email using Nodemailer
     const mailOptions = {
       from: fromEmail,
-      to: recipientEmail,
+      to: finalRecipientEmail,
       replyTo: replyTo,
       subject: emailSubject,
       html: emailHtml,

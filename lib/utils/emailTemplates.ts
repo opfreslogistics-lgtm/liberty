@@ -586,3 +586,242 @@ export function getAccountFundedEmailTemplate(data: AccountFundedEmailData): { s
   }
 }
 
+// Contact Form Email Templates
+export interface ContactFormEmailData {
+  senderName: string
+  senderEmail: string
+  senderPhone: string
+  subject: string
+  message: string
+  date: string
+}
+
+export function getContactFormEmailTemplate(data: ContactFormEmailData): { subject: string; html: string } {
+  const content = `
+    <p style="margin: 0 0 20px; color: #666666; line-height: 1.6; font-size: 16px;">
+      You have received a new message from your website contact form.
+    </p>
+    
+    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+      <tr>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #333333; font-weight: 600; width: 35%;">Name:</td>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #666666;">${data.senderName}</td>
+      </tr>
+      <tr>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #333333; font-weight: 600;">Email:</td>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #666666;"><a href="mailto:${data.senderEmail}" style="color: #047857;">${data.senderEmail}</a></td>
+      </tr>
+      <tr>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #333333; font-weight: 600;">Phone:</td>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #666666;">${data.senderPhone}</td>
+      </tr>
+      <tr>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #333333; font-weight: 600;">Subject:</td>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #666666;">${data.subject}</td>
+      </tr>
+      <tr>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #333333; font-weight: 600;">Date:</td>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #666666;">${data.date}</td>
+      </tr>
+    </table>
+    
+    <div style="margin: 20px 0; padding: 20px; background-color: #f9fafb; border-left: 4px solid #047857; border-radius: 4px;">
+      <p style="margin: 0 0 8px; color: #333333; font-weight: 600;">Message:</p>
+      <p style="margin: 0; color: #666666; line-height: 1.6; white-space: pre-wrap;">${data.message}</p>
+    </div>
+    
+    <p style="margin: 20px 0 0; color: #666666; line-height: 1.6; font-size: 14px;">
+      Please respond to this inquiry within 24 hours.
+    </p>
+  `
+
+  return {
+    subject: `New Contact Form Submission: ${data.subject}`,
+    html: getEmailTemplate('New Contact Form Submission', content),
+  }
+}
+
+export interface ContactConfirmationEmailData {
+  name: string
+  subject: string
+  message: string
+  date: string
+}
+
+export function getContactConfirmationEmailTemplate(data: ContactConfirmationEmailData): { subject: string; html: string } {
+  const content = `
+    <p style="margin: 0 0 20px; color: #666666; line-height: 1.6; font-size: 16px;">
+      Dear ${data.name},
+    </p>
+    
+    <p style="margin: 0 0 20px; color: #666666; line-height: 1.6; font-size: 16px;">
+      Thank you for contacting Liberty National Bank. We have received your message and one of our team members will respond to you within 24 hours.
+    </p>
+    
+    <div style="margin: 20px 0; padding: 20px; background-color: #f0fdf4; border-left: 4px solid #047857; border-radius: 4px;">
+      <p style="margin: 0 0 12px; color: #333333; font-weight: 600;">Your Message Details:</p>
+      <table style="width: 100%;">
+        <tr>
+          <td style="padding: 8px 0; color: #333333; font-weight: 600; width: 30%;">Subject:</td>
+          <td style="padding: 8px 0; color: #666666;">${data.subject}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0; color: #333333; font-weight: 600;">Date:</td>
+          <td style="padding: 8px 0; color: #666666;">${data.date}</td>
+        </tr>
+      </table>
+      <p style="margin: 12px 0 0; color: #666666; line-height: 1.6; white-space: pre-wrap;">${data.message}</p>
+    </div>
+    
+    <p style="margin: 20px 0 0; color: #666666; line-height: 1.6; font-size: 14px;">
+      If you have an urgent matter, please call us at 1-800-LIBERTY or visit your nearest branch.
+    </p>
+    
+    <p style="margin: 20px 0 0; color: #666666; line-height: 1.6; font-size: 14px;">
+      Thank you for choosing Liberty National Bank.
+    </p>
+  `
+
+  return {
+    subject: 'We received your message - Liberty National Bank',
+    html: getEmailTemplate('Message Received Confirmation', content),
+  }
+}
+
+// Support Ticket Email Templates
+export interface SupportTicketEmailData {
+  ticketNumber: string
+  userName: string
+  userEmail: string
+  category: string
+  priority: string
+  subject: string
+  message: string
+  date: string
+}
+
+export function getSupportTicketEmailTemplate(data: SupportTicketEmailData): { subject: string; html: string } {
+  const priorityColor = data.priority === 'high' ? '#ef4444' : data.priority === 'medium' ? '#f59e0b' : '#10b981'
+  
+  const content = `
+    <p style="margin: 0 0 20px; color: #666666; line-height: 1.6; font-size: 16px;">
+      A new support ticket has been created and requires your attention.
+    </p>
+    
+    <div style="margin: 20px 0; padding: 16px; background-color: #f9fafb; border-radius: 8px; border: 2px solid ${priorityColor};">
+      <p style="margin: 0; color: ${priorityColor}; font-weight: 700; font-size: 14px; text-transform: uppercase;">
+        ${data.priority} Priority Ticket
+      </p>
+    </div>
+    
+    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+      <tr>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #333333; font-weight: 600; width: 35%;">Ticket Number:</td>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #666666; font-family: monospace; font-weight: 600;">${data.ticketNumber}</td>
+      </tr>
+      <tr>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #333333; font-weight: 600;">User:</td>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #666666;">${data.userName}</td>
+      </tr>
+      <tr>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #333333; font-weight: 600;">Email:</td>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #666666;"><a href="mailto:${data.userEmail}" style="color: #047857;">${data.userEmail}</a></td>
+      </tr>
+      <tr>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #333333; font-weight: 600;">Category:</td>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #666666;">${data.category}</td>
+      </tr>
+      <tr>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #333333; font-weight: 600;">Subject:</td>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #666666;">${data.subject}</td>
+      </tr>
+      <tr>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #333333; font-weight: 600;">Created:</td>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; color: #666666;">${data.date}</td>
+      </tr>
+    </table>
+    
+    <div style="margin: 20px 0; padding: 20px; background-color: #f9fafb; border-left: 4px solid #047857; border-radius: 4px;">
+      <p style="margin: 0 0 8px; color: #333333; font-weight: 600;">Issue Description:</p>
+      <p style="margin: 0; color: #666666; line-height: 1.6; white-space: pre-wrap;">${data.message}</p>
+    </div>
+    
+    <p style="margin: 20px 0 0; color: #666666; line-height: 1.6; font-size: 14px;">
+      Please review and respond to this ticket as soon as possible.
+    </p>
+  `
+
+  return {
+    subject: `New Support Ticket [${data.priority.toUpperCase()}]: ${data.subject} - ${data.ticketNumber}`,
+    html: getEmailTemplate('New Support Ticket', content),
+  }
+}
+
+export interface SupportTicketConfirmationEmailData {
+  userName: string
+  ticketNumber: string
+  category: string
+  subject: string
+  message: string
+  date: string
+}
+
+export function getSupportTicketConfirmationEmailTemplate(data: SupportTicketConfirmationEmailData): { subject: string; html: string } {
+  const content = `
+    <p style="margin: 0 0 20px; color: #666666; line-height: 1.6; font-size: 16px;">
+      Dear ${data.userName},
+    </p>
+    
+    <p style="margin: 0 0 20px; color: #666666; line-height: 1.6; font-size: 16px;">
+      Thank you for contacting Liberty National Bank Support. Your ticket has been created and our support team will assist you shortly.
+    </p>
+    
+    <div style="margin: 20px 0; padding: 20px; background-color: #f0fdf4; border-left: 4px solid #047857; border-radius: 4px;">
+      <p style="margin: 0 0 12px; color: #333333; font-weight: 600; font-size: 18px;">Ticket Information:</p>
+      <table style="width: 100%;">
+        <tr>
+          <td style="padding: 8px 0; color: #333333; font-weight: 600; width: 30%;">Ticket Number:</td>
+          <td style="padding: 8px 0; color: #666666; font-family: monospace; font-weight: 600;">${data.ticketNumber}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0; color: #333333; font-weight: 600;">Category:</td>
+          <td style="padding: 8px 0; color: #666666;">${data.category}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0; color: #333333; font-weight: 600;">Subject:</td>
+          <td style="padding: 8px 0; color: #666666;">${data.subject}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0; color: #333333; font-weight: 600;">Created:</td>
+          <td style="padding: 8px 0; color: #666666;">${data.date}</td>
+        </tr>
+      </table>
+    </div>
+    
+    <div style="margin: 20px 0; padding: 20px; background-color: #f9fafb; border-left: 4px solid #6b7280; border-radius: 4px;">
+      <p style="margin: 0 0 8px; color: #333333; font-weight: 600;">Your Message:</p>
+      <p style="margin: 0; color: #666666; line-height: 1.6; white-space: pre-wrap;">${data.message}</p>
+    </div>
+    
+    <div style="margin: 20px 0; padding: 16px; background-color: #dbeafe; border-left: 4px solid #3b82f6; border-radius: 4px;">
+      <p style="margin: 0; color: #1e40af; line-height: 1.6; font-size: 14px;">
+        <strong>What happens next?</strong><br>
+        Our support team typically responds within 24 hours. You can view and track your ticket in the Support section of your account dashboard.
+      </p>
+    </div>
+    
+    <p style="margin: 20px 0 0; color: #666666; line-height: 1.6; font-size: 14px;">
+      For urgent matters, please call our 24/7 hotline at <strong>1-800-LIBERTY</strong>.
+    </p>
+    
+    <p style="margin: 20px 0 0; color: #666666; line-height: 1.6; font-size: 14px;">
+      Thank you for choosing Liberty National Bank.
+    </p>
+  `
+
+  return {
+    subject: `Support Ticket Created - ${data.ticketNumber}`,
+    html: getEmailTemplate('Support Ticket Confirmation', content),
+  }
+}
+

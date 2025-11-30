@@ -102,23 +102,37 @@ export default function ContactPage() {
     e.preventDefault()
     setSubmitting(true)
     
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    
-    setSubmitted(true)
-    setSubmitting(false)
-    
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setSubmitted(false)
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: ''
+    try {
+      // Submit contact form
+      const response = await fetch('/api/contact/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       })
-    }, 3000)
+
+      if (!response.ok) {
+        throw new Error('Failed to submit form')
+      }
+      
+      setSubmitted(true)
+      
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        setSubmitted(false)
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: ''
+        })
+      }, 3000)
+    } catch (error) {
+      console.error('Error submitting form:', error)
+      alert('Failed to submit form. Please try again or contact us directly.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
