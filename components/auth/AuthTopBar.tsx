@@ -15,12 +15,11 @@ export default function AuthTopBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   
   const appName = settings.app_name || 'Liberty National Bank'
-  // Get logo URL - prioritize uploaded logos with proper fallback
-  const logoDark = settings.app_logo_dark || settings.app_logo || ''
+  // Get logo URLs - prioritize uploaded logos (same logic as AdvancedNavbar)
   const logoLight = settings.app_logo_light || settings.app_logo || ''
-  const logoUrl = (theme === 'dark' && logoDark) 
-    ? logoDark 
-    : (logoLight || logoDark || '')
+  const logoDark = settings.app_logo_dark || settings.app_logo || ''
+  // Theme-aware logo selection
+  const logoUrl = theme === 'dark' ? logoDark : logoLight
 
   const isLoginPage = pathname === '/login'
   const isSignupPage = pathname === '/signup'
@@ -33,20 +32,25 @@ export default function AuthTopBar() {
           <div className="flex items-center pl-4 sm:pl-6 lg:pl-8">
             <Link href="/" className="flex items-center group">
               {logoUrl ? (
-                <div className="h-10 flex items-center">
+                <div className="h-10 sm:h-12 flex items-center">
                   <Image
                     src={logoUrl}
                     alt={`${appName} Logo`}
                     width={200}
-                    height={40}
-                    className="h-full w-auto object-contain transition-transform group-hover:scale-105"
+                    height={48}
+                    className="h-full w-auto max-w-[160px] sm:max-w-[200px] object-contain group-hover:opacity-90 transition-opacity duration-300"
                     unoptimized
                     priority
                   />
                 </div>
               ) : (
-                <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-green-700 to-green-800 rounded-xl shadow-lg">
-                  <Building2 className="w-6 h-6 text-white" />
+                <div className="flex items-center space-x-2">
+                  <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-green-700 to-green-800 rounded-xl shadow-lg">
+                    <Building2 className="w-6 h-6 text-white" />
+                  </div>
+                  <span className="hidden sm:block text-lg font-bold text-gray-900 dark:text-white">
+                    {appName}
+                  </span>
                 </div>
               )}
             </Link>
@@ -185,4 +189,3 @@ export default function AuthTopBar() {
     </nav>
   )
 }
-
