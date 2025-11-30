@@ -1,0 +1,29 @@
+# ============================================
+# EMAIL CONFIGURATION FOR .env.local
+# ============================================
+# Add these lines to your existing .env.local file
+# ============================================
+
+# Resend Email Service API Key
+# Get this from https://resend.com after creating an account
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# Email From Address
+# Format: "Display Name <email@domain.com>"
+# For development, you can use: "Liberty Bank <onboarding@resend.dev>"
+# For production, use your verified domain: "Liberty Bank <noreply@yourdomain.com>"
+FROM_EMAIL=Liberty Bank <noreply@libertybank.com>
+
+# Reply-To Email Address
+# This is where replies to emails will go
+REPLY_TO_EMAIL=support@libertybank.com
+
+# ============================================
+# NOTES:
+# ============================================
+# 1. Replace re_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx with your actual Resend API key
+# 2. Replace libertybank.com with your actual domain (or use onboarding@resend.dev for testing)
+# 3. Make sure your domain is verified in Resend dashboard before using in production
+# 4. These variables are already configured in the code, just add the values
+# ============================================
+
